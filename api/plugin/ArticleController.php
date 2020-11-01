@@ -25,7 +25,7 @@ class ArticleController extends Controller
         $q = Article::query();
         $limit=$request->limit;
         if($request->title){
-            $q->where('name',$request->title);
+            $q->where('name','like','%'.$request->title.'%');
         }
         if($request->type){
             $q->where('column_id',$request->type);
@@ -71,7 +71,7 @@ class ArticleController extends Controller
             $Article->keyword = $request->keyword;
             $Article->describes = $request->describes;
             $Article->show = $request->show ? Article::ARTICLE_SHOW_YES : Article::ARTICLE_SHOW_NO;
-            $Article->column_id = $request->column_id;
+            $Article->column_id = $request->column_id[count($request->column_id)-1];
             $Article->sort = $request->sort;
             $Article->save();
             $ArticleProperty=new ArticleProperty();
@@ -105,6 +105,7 @@ class ArticleController extends Controller
      */
     public function show($id,Request $request)
     {
+        Article::$withoutAppends = false;
         $return['article']=Article::with('ArticleProperty','resources')->find($id);
         $Column=Column::where('list',Column::COLUMN_LIST_YES)->get();
         $return['column']=genTree($Column->toArray(),'pid');
@@ -150,7 +151,7 @@ class ArticleController extends Controller
             $Article->keyword = $request->keyword;
             $Article->describes = $request->describes;
             $Article->show = $request->show ? Article::ARTICLE_SHOW_YES : Article::ARTICLE_SHOW_NO;
-            $Article->column_id = $request->column_id;
+            $Article->column_id = $request->column_id[count($request->column_id)-1];
             $Article->sort = $request->sort;
             $Article->save();
             $ArticleProperty=ArticleProperty::where('article_id',$Article->id)->first();

@@ -37,6 +37,24 @@ class Article extends Model
         return $this->morphOne('App\Models\v1\Resource', 'image');
     }
 
+    /**
+     * 栏目ID
+     *
+     * @param $row
+     * @return array
+     */
+    protected function getColumnIdAttribute()
+    {
+        if(isset($this->attributes['column_id'])){
+            if(self::$withoutAppends){
+                return $this->attributes['column_id'];
+            }else{
+                return [$this->attributes['column_id']];
+            }
+
+        }
+    }
+
     //栏目
     public function Column()
     {

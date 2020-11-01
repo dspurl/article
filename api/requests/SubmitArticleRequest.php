@@ -42,7 +42,7 @@ class SubmitArticleRequest extends Request
             case 'POST':    //create
                 return [
                     'name' => 'required|string|max:60',
-                    'column_id' => 'required|numeric',
+                    'column_id' => 'required|array',
                     'keyword' => 'nullable|string|max:255',
                     'describes' => 'nullable|string|max:255',
                     'show' => 'required|numeric',
@@ -51,7 +51,7 @@ class SubmitArticleRequest extends Request
             case 'PUT': //update
                 return [
                     'name' => 'required|string|max:60',
-                    'column_id' => 'required|numeric',
+                    'column_id' => 'required|array',
                     'keyword' => 'nullable|string|max:255',
                     'describes' => 'nullable|string|max:255',
                     'show' => 'required|numeric',

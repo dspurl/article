@@ -127,7 +127,6 @@ export default {
           details: ''
         },
         column_id: '',
-        list: 0,
         sort: 5
       },
       imgProgress: false,

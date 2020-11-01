@@ -1,7 +1,7 @@
 <template>
 	<view class="subject">
 		<view class="title">{{data.name}}</view>
-		<view class="text-lg text-gray margin-top margin-bottom">{{data.created_at}}</view>
+		<view class="text-lg text-gray margin-top margin-bottom">最近更新时间：{{data.updated_at}}</view>
 		<u-parse v-if="data.column_property && list === '1'" class="details" :content="data.column_property.details"/>
 		<u-parse v-if="data.article_property && list === '0'" class="details" :content="data.article_property.details"/>
 		<view class="text-lg text-gray margin-top">阅读 {{data.pv}}</view>
