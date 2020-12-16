@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view v-if="data.length === 0">
-			<view class="no-data flex justify-center">暂时没有信息哦~</view>
+			<view class="no-data flex justify-center">暂时没有文章哦~</view>
 		</view>
 		<block v-else>
 			<view class="notice-item" v-for="(item, index) in data" :key="index" @click="goNavigator(item)">
