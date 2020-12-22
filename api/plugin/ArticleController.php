@@ -76,7 +76,7 @@ class ArticleController extends Controller
             $Article->save();
             $ArticleProperty=new ArticleProperty();
             $ArticleProperty->article_id = $Article->id;
-            $ArticleProperty->details = $request->article_property['details'];
+            $ArticleProperty->details = imgFindReplaceUpdate($request->article_property['details'],'article');
             $ArticleProperty->save();
             if($request->resources['img']){
                 $Resource=new Resource();
@@ -155,7 +155,7 @@ class ArticleController extends Controller
             $Article->sort = $request->sort;
             $Article->save();
             $ArticleProperty=ArticleProperty::where('article_id',$Article->id)->first();
-            $ArticleProperty->details = $request->article_property['details'];
+            $ArticleProperty->details = imgFindReplaceUpdate($request->article_property['details'],'article');
             $ArticleProperty->save();
             if($request->resources){
                 if(array_key_exists('id',$request->resources)){
