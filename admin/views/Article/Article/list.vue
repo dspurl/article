@@ -35,17 +35,22 @@
       style="width: 100%;"
       @sort-change="sortChange"
       @selection-change="handleSelectionChange">
-      <el-table-column label="文章标题" prop="id" fixed="left">
+      <el-table-column label="ID" prop="id" fixed="left">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>      
+      <el-table-column label="文章标题" prop="name" fixed="left">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="所属栏目" align="center" prop="goods_sn">
+      <el-table-column label="所属栏目" align="center" >
         <template slot-scope="scope">
           <span>{{ scope.row.column.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="时间" align="center" prop="goods_sn">
+      <el-table-column label="时间" align="center" prop="created_at">
         <template slot-scope="scope">
           <span>{{ scope.row.created_at }}</span>
         </template>
@@ -135,9 +140,6 @@ export default {
         ],
         type: [
           { required: true, message: '请选择类型', trigger: 'change' }
-        ],
-        price: [
-          { required: true, message: '请填写价格', trigger: 'change' }
         ],
         img: [
           { required: true, message: '请上传图片', trigger: 'change' }
