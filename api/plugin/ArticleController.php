@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
+    public $tidyConfig = [
+    'clean'       => true,
+    'drop-proprietary-attributes'       => true,
+    'drop-empty-paras'       => true,
+    'indent'         => true,
+    'word-2000'         => false,
+    'output-html'   => true,
+    'show-body-only' => true
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -77,6 +86,12 @@ class ArticleController extends Controller
             $ArticleProperty=new ArticleProperty();
             $ArticleProperty->article_id = $Article->id;
             $ArticleProperty->details = imgFindReplaceUpdate($request->article_property['details'],'article');
+            // tidy 过滤
+            $tidy = new \tidy;
+            $tidy->parseString($ArticleProperty->details, $this->tidyConfig, 'utf8');
+            $tidy->cleanRepair();
+            $ArticleProperty->details =$tidy;
+            
             $ArticleProperty->save();
             if($request->resources['img']){
                 $Resource=new Resource();
@@ -156,6 +171,13 @@ class ArticleController extends Controller
             $Article->save();
             $ArticleProperty=ArticleProperty::where('article_id',$Article->id)->first();
             $ArticleProperty->details = imgFindReplaceUpdate($request->article_property['details'],'article');
+            
+            // tidy 过滤
+            $tidy = new \tidy;
+            $tidy->parseString($ArticleProperty->details, $this->tidyConfig, 'utf8');
+            $tidy->cleanRepair();
+            $ArticleProperty->details =$tidy;
+            
             $ArticleProperty->save();
             if($request->resources){
                 if(array_key_exists('id',$request->resources)){
