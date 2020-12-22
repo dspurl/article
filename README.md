@@ -1,6 +1,7 @@
 #栏目文章
 ## 说明
 - 该插件依赖dsshop项目，而非通用插件
+- 该插件依赖PHP Tidy扩展插件(CentOS:sudo yum install php-tidy, Ubuntu: sudo apt-get install php-tidy)
 - 支持版本:dshop v1.1.8及以上
 - 已同步版本：dsshop v1.4
 
