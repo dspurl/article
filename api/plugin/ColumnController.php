@@ -26,7 +26,7 @@ class ColumnController extends Controller
         $q->querySort($request->sort);
         $limit=$request->limit;
         if($request->title){
-            $q->where('name',$request->title);
+            $q->where('name','like','%'.$request->title.'%');
         }
         $paginate=$q->with(['Column'])->paginate($limit);
         return resReturn(1,$paginate);
