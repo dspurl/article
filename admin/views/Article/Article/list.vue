@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery" class="demo-form-inline">
         <el-form-item label="文章标题">
-          <el-input v-model="listQuery.title" placeholder="标题" @keyup.enter.native="handleFilter" clearable/>
+          <el-input v-model="listQuery.title" placeholder="标题" clearable @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="所属栏目">
           <el-select v-model="listQuery.type" placeholder="类型" clearable>
@@ -39,7 +39,7 @@
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
-      </el-table-column>      
+      </el-table-column>
       <el-table-column label="文章标题" prop="name" fixed="left">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
