@@ -8,46 +8,40 @@ export function getList(query) {
   })
 }
 
-export function createSubmit(data) {
+export function create(data) {
   data = Qs.parse({
     data
   })
   data = data.data
   return request({
     url: 'column',
-    method: 'POST',
+    method: 'post',
     data
   })
 }
 
-export function getShow(id) {
+export function edit(data) {
+  data = Qs.parse({
+    data
+  })
+  data = data.data
+  return request({
+    url: 'column/' + data.id,
+    method: 'post',
+    data
+  })
+}
+
+export function destroy(id) {
+  return request({
+    url: 'column/destroy/' + id,
+    method: 'post'
+  })
+}
+
+export function detail(id) {
   return request({
     url: 'column/' + id,
     method: 'get'
   })
 }
-
-export function updateSubmit(id, data) {
-  data = Qs.parse({
-    data
-  })
-  data = data.data
-  return request({
-    url: 'column/' + id,
-    method: 'PUT',
-    data
-  })
-}
-
-export function setDelete(id, data) {
-  data = Qs.parse({
-    data
-  })
-  data = data.data
-  return request({
-    url: 'column/' + id,
-    method: 'DELETE',
-    data
-  })
-}
-

@@ -57,7 +57,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="dialogStatus==='create'?createSubmit():updateSubmit()">提交</el-button>
+        <el-button :loading="formLoading" type="primary" @click="dialogStatus==='create'?createSubmit():updateSubmit()">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -91,7 +91,7 @@
   }
 </style>
 <script>
-import { getShow, createSubmit, updateSubmit } from '@/api/article'
+import { detail, edit, create } from '@/api/article'
 import { getToken } from '@/utils/auth'
 import tinymce from '@/components/tinymce5'
 export default {
@@ -105,6 +105,7 @@ export default {
   },
   data() {
     return {
+      formLoading: false,
       disabled: false,
       actionurl: process.env.BASE_API + 'uploadPictures',
       imgHeaders: {
@@ -164,7 +165,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      getShow(this.id ? this.id : 0).then(response => {
+      detail(this.id ? this.id : 0).then(response => {
         this.column = response.data.column
         if (response.data.article) {
           this.ruleForm = response.data.article
@@ -179,10 +180,12 @@ export default {
       })
     },
     createSubmit() { // 添加
+      this.formLoading = true
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
-          createSubmit(this.ruleForm).then(() => {
+          create(this.ruleForm).then(() => {
             this.dialogFormVisible = false
+            this.formLoading = false
             this.$notify({
               title: this.$t('hint.succeed'),
               message: this.$t('hint.creatingSuccessful'),
@@ -190,15 +193,21 @@ export default {
               duration: 2000
             })
             setTimeout(this.$router.back(-1), 2000)
+          }).catch(() => {
+            this.formLoading = false
           })
+        } else {
+          this.formLoading = false
         }
       })
     },
     updateSubmit() { // 更新
+      this.formLoading = true
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
-          updateSubmit(this.ruleForm.id, this.ruleForm).then(() => {
+          edit(this.ruleForm).then(() => {
             this.dialogFormVisible = false
+            this.formLoading = false
             this.$notify({
               title: this.$t('hint.succeed'),
               message: this.$t('hint.updateSuccessful'),
@@ -206,7 +215,11 @@ export default {
               duration: 2000
             })
             setTimeout(this.$router.back(-1), 2000)
+          }).catch(() => {
+            this.formLoading = false
           })
+        } else {
+          this.formLoading = false
         }
       })
     },

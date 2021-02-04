@@ -13,21 +13,15 @@ class SubmitArticleRequest extends Request
      */
     public function authorize()
     {
-        switch ($this->method())
-        {
-            case 'POST':    //create
+        switch ($this->method()) {
+            case 'POST':
                 return true;
-            case 'PUT': //update
-                return true;
-            case 'PATCH':
             case 'GET':
-            case 'DELETE':
             default:
             {
                 return false;
             }
         }
-
     }
 
     /**
@@ -37,29 +31,29 @@ class SubmitArticleRequest extends Request
      */
     public function rules()
     {
-        switch ($this->method())
-        {
+        $request = Request::all();
+        switch ($this->method()) {
             case 'POST':    //create
-                return [
-                    'name' => 'required|string|max:60',
-                    'column_id' => 'required|array',
-                    'keyword' => 'nullable|string|max:255',
-                    'describes' => 'nullable|string|max:255',
-                    'show' => 'required|numeric',
-                    'sort' => 'required|numeric',
-                ];
-            case 'PUT': //update
-                return [
-                    'name' => 'required|string|max:60',
-                    'column_id' => 'required|array',
-                    'keyword' => 'nullable|string|max:255',
-                    'describes' => 'nullable|string|max:255',
-                    'show' => 'required|numeric',
-                    'sort' => 'required|numeric',
-                ];
-            case 'PATCH':
+                if (Request::has('id')) {   //更新
+                    return [
+                        'name' => 'required|unique:articles,name,' . $request['id'] . '|string|max:60',
+                        'column_id' => 'required|array',
+                        'keyword' => 'nullable|string|max:255',
+                        'describes' => 'nullable|string|max:255',
+                        'show' => 'required|numeric',
+                        'sort' => 'required|numeric',
+                    ];
+                } else {
+                    return [
+                        'name' => 'required|unique:articles|string|max:60',
+                        'column_id' => 'required|array',
+                        'keyword' => 'nullable|string|max:255',
+                        'describes' => 'nullable|string|max:255',
+                        'show' => 'required|numeric',
+                        'sort' => 'required|numeric',
+                    ];
+                }
             case 'GET':
-            case 'DELETE':
             default:
             {
                 return [];
@@ -70,6 +64,18 @@ class SubmitArticleRequest extends Request
     public function messages()
     {
         return [
+            'name.required' => '文章名称不能为空',
+            'name.unique' => '文章名称已存在',
+            'name.string' => '文章名称格式有误',
+            'name.max' => '文章名称长度不能超过60位',
+            'column_id.required' => '上级类目不能为空',
+            'column_id.unique' => '上级类目格式有误',
+            'keyword.max' => '关键字长度不能超过255位',
+            'describes.max' => '描述长度不能超过255位',
+            'show.required' => '是否显示不能为空',
+            'show.numeric' => '是否显示格式有误',
+            'sort.required' => '排序不能为空',
+            'sort.numeric' => '排序格式有误',
         ];
     }
 }

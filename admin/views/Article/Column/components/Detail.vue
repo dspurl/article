@@ -1,4 +1,3 @@
-<!--suppress ALL -->
 <template>
   <div v-loading="loading" class="createPost-container" style="padding-top: 40px">
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm" style="padding-left: 200px;padding-right:200px;">
@@ -66,7 +65,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="dialogStatus==='create'?createSubmit():updateSubmit()">提交</el-button>
+        <el-button :loading="formLoading" type="primary" @click="dialogStatus==='create'?createSubmit():updateSubmit()">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -100,7 +99,7 @@
   }
 </style>
 <script>
-import { getShow, createSubmit, updateSubmit } from '@/api/column'
+import { detail, edit, create } from '@/api/column'
 import { getToken } from '@/utils/auth'
 import tinymce from '@/components/tinymce5'
 export default {
@@ -114,6 +113,7 @@ export default {
   },
   data() {
     return {
+      formLoading: false,
       disabled: false,
       actionurl: process.env.BASE_API + 'uploadPictures',
       imgHeaders: {
@@ -173,7 +173,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      getShow(this.id ? this.id : 0).then(response => {
+      detail(this.id ? this.id : 0).then(response => {
         this.pidList = response.data.pidList
         if (response.data.column) {
           this.ruleForm = response.data.column
@@ -188,10 +188,12 @@ export default {
       })
     },
     createSubmit() { // 添加
+      this.formLoading = true
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
-          createSubmit(this.ruleForm).then(() => {
+          create(this.ruleForm).then(() => {
             this.dialogFormVisible = false
+            this.formLoading = false
             this.$notify({
               title: this.$t('hint.succeed'),
               message: this.$t('hint.creatingSuccessful'),
@@ -199,15 +201,21 @@ export default {
               duration: 2000
             })
             setTimeout(this.$router.back(-1), 2000)
+          }).catch(() => {
+            this.formLoading = false
           })
+        } else {
+          this.formLoading = false
         }
       })
     },
     updateSubmit() { // 更新
+      this.formLoading = true
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
-          updateSubmit(this.ruleForm.id, this.ruleForm).then(() => {
+          edit(this.ruleForm).then(() => {
             this.dialogFormVisible = false
+            this.formLoading = false
             this.$notify({
               title: this.$t('hint.succeed'),
               message: this.$t('hint.updateSuccessful'),
@@ -215,7 +223,11 @@ export default {
               duration: 2000
             })
             setTimeout(this.$router.back(-1), 2000)
+          }).catch(() => {
+            this.formLoading = false
           })
+        } else {
+          this.formLoading = false
         }
       })
     },

@@ -36,11 +36,11 @@
 			loadData(type){
 				const that = this
 				if(this.list === '1'){	//栏目详情
-					Column.getDetails(that.id,{},function(res){
+					Column.detail(that.id,{},function(res){
 						that.data = res
 					})
 				}else{
-					Article.getDetails(that.id,{},function(res){
+					Article.detail(that.id,{},function(res){
 						that.data = res
 					})
 				}
@@ -49,9 +49,9 @@
 			setPv(){
 				const that = this
 				if(this.list === '1'){	//栏目
-					Column.setPv(that.id,{},function(res){})
+					Column.pv(that.id,{},function(res){})
 				}else{
-					Article.setPv(that.id,{},function(res){})
+					Article.pv(that.id,{},function(res){})
 				}
 			}
 		}

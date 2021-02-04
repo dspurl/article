@@ -11,7 +11,7 @@ export default {
 		  })
 		})
 	},
-	getDetails(id, data,success,fail) {
+	detail(id, data,success,fail) {
 		Network.setGetMessage('column/' + id,data,'加载中', function (res) {
 		  success(res)
 		}, function (res) {
@@ -22,8 +22,8 @@ export default {
 		  })
 		})
 	},
-	setPv(id,data,success,fail) {
-		Network.setPostMessage('column/' + id,data,'处理中', function (res) {
+	pv(id,data,success,fail) {
+		Network.setPost('column/pv/' + id,data, function (res) {
 		  success(res)
 		}, function (res) {
 		  uni.showToast({

@@ -1,7 +1,7 @@
 import Network from '../utils/network.js'
 export default {
 	getList(id,data,success,fail) {
-		Network.setGetMessage('articleList/' + id,data,'加载中', function (res) {
+		Network.setGetMessage('article/column/' + id,data,'加载中', function (res) {
 		  success(res)
 		}, function (res) {
 		  uni.showToast({
@@ -11,7 +11,7 @@ export default {
 		  })
 		})
 	},
-	getDetails(id, data,success,fail) {
+	detail(id, data,success,fail) {
 		Network.setGetMessage('article/' + id,data,'加载中', function (res) {
 		  success(res)
 		}, function (res) {
@@ -22,8 +22,8 @@ export default {
 		  })
 		})
 	},
-	setPv(id,data,success,fail) {
-		Network.setPostMessage('article/' + id,data,'处理中', function (res) {
+	pv(id,data,success,fail) {
+		Network.setPost('article/pv/' + id,data, function (res) {
 		  success(res)
 		}, function (res) {
 		  uni.showToast({

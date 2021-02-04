@@ -6,7 +6,7 @@
 import Detail from './components/Detail'
 
 export default {
-  name: 'CreateColumn',
+  name: 'ColumnCreate',
   components: { Detail }
 }
 </script>
