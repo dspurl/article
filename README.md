@@ -39,8 +39,17 @@ php artisan migrate
 
 #### 七、 进入后台，为管理员分配权限
 #### 八、 插件示例代码，以下仅供参考，请根据自己的业务自行实现
-- trade/Dsshop/pages/user/user.vue`
-![](/image/1.png)
+ ```vue
+#trade/Dsshop/pages/user/user.vue
+<template>
+	<list-cell icon="icon-xiaoxi" iconColor="#9789f7" title="帮助中心" @eventClick="navToNoValidation('/pages/article/column')"></list-cell>
+</template>
+<script>
+</script>
+ ```
+
+
+
 ## 如何更新插件
 - 将最新版的插件下载，并替换老的插件，后台可一键升级
 ## 如何卸载插件
