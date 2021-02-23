@@ -57,7 +57,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <el-button :loading="formLoading" type="primary" @click="dialogStatus==='create'?createSubmit():updateSubmit()">提交</el-button>
+        <el-button :loading="formLoading" type="primary" @click="dialogStatus==='create'?create():edit()">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -179,7 +179,7 @@ export default {
         this.loading = false
       })
     },
-    createSubmit() { // 添加
+    create() { // 添加
       this.formLoading = true
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
@@ -201,7 +201,7 @@ export default {
         }
       })
     },
-    updateSubmit() { // 更新
+    edit() { // 更新
       this.formLoading = true
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
