@@ -1,8 +1,9 @@
 #栏目文章
+
 ## 说明
 - 该插件依赖dsshop项目，而非通用插件
-- 支持版本:dshop v2.0及以上
-- 已同步版本：dsshop v2.0.1
+- 支持版本:dshop v2.1.0及以上
+- 已同步版本：dsshop v2.1.0
 
 ## 功能介绍
 - 支持为栏目和文章添加缩略图
@@ -40,14 +41,48 @@ php artisan migrate
 #### 七、 进入后台，为管理员分配权限
 #### 八、 插件示例代码，以下仅供参考，请根据自己的业务自行实现
  ```vue
-#trade/Dsshop/pages/user/user.vue
+#client/Dsshop/pages/user/user.vue
 <template>
 	<list-cell icon="icon-xiaoxi" iconColor="#9789f7" title="帮助中心" @eventClick="navToNoValidation('/pages/article/column')"></list-cell>
 </template>
 <script>
 </script>
  ```
-
+ ##### 使用文章，例如底部添加文章链接
+```vue
+#web/components/Footer.vue
+<template>
+	<!-- 服务end-->
+    <el-divider class="container"></el-divider>
+    <!-- 链接-->
+    <div class="links container">
+      <div class="li">
+        <div class="dt">购物指南</div>
+        <NuxtLink class="dd" :to="{ path: '/article/list', query: { id: 7 }}">销售时间</NuxtLink>
+        <NuxtLink class="dd" :to="{ path: '/article/list', query: { id: 8 }}">发货时效</NuxtLink>
+        <NuxtLink class="dd" :to="{ path: '/article/list', query: { id: 9 }}">包邮政策</NuxtLink>
+      </div>
+      <div class="li">
+        <div class="dt">支付方式</div>
+        <NuxtLink class="dd" :to="{ path: '/article/list', query: { id: 17 }}">在线支付</NuxtLink>
+      </div>
+      <div class="li">
+        <div class="dt">账户管理</div>
+        <NuxtLink class="dd" :to="{ path: '/article/list', query: { id: 17 }}">账户注册</NuxtLink>
+        <NuxtLink class="dd" :to="{ path: '/article/list', query: { id: 17 }}">忘记密码</NuxtLink>
+      </div>
+      <div class="li">
+        <div class="dt">关注我们</div>
+        <NuxtLink class="dd" :to="{ path: '/article/list', query: { id: 17 }}">关于我们</NuxtLink>
+        <NuxtLink class="dd" :to="{ path: '/article/list', query: { id: 18 }}">加入我们</NuxtLink>
+        <NuxtLink class="dd" :to="{ path: '/article/list', query: { id: 17 }}">联系我们</NuxtLink>
+      </div>
+    </div>
+    <!-- 链接end-->
+</template>
+<script>
+</script>
+```
 
 
 ## 如何更新插件

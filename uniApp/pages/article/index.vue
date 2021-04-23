@@ -67,8 +67,9 @@
 					limit: 8,
 					page: this.page
 				},function(res){
-					that.data = that.data.concat(res.data)
-					if (res.last_page > that.page){
+					console.log(res.paginate)
+					that.data = that.data.concat(res.paginate.data)
+					if (res.paginate.last_page > that.page){
 						that.page ++
 						//判断是否还有数据， 有改为 more， 没有改为noMore
 						that.loadingType = 'more'

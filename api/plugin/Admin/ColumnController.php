@@ -41,8 +41,23 @@ class ColumnController extends Controller
         if ($request->title) {
             $q->where('name', 'like', '%' . $request->title . '%');
         }
+        if ($request->has('pid')) {
+            if($request->pid){
+                $q->where('pid', $request->pid[count($request->pid)-1]);
+            }
+        }
         $paginate = $q->with(['Column'])->paginate($limit);
-        return resReturn(1, $paginate);
+        $Column = Column::where('show', Column::COLUMN_SHOW_YES)->where('list', Column::COLUMN_LIST_YES)->get();
+        foreach ($Column as $id => $c) {
+            $Column[$id]->label = $c->name;
+            $Column[$id]->value = $c->id;
+        }
+        $return['list'] = collect(genTree($Column->toArray(), 'pid'))->prepend(array(
+            'value' => 0,
+            'label' => '顶级分组'
+        ));
+        $return['paginate'] = $paginate;
+        return resReturn(1, $return);
     }
 
     /**
@@ -54,6 +69,7 @@ class ColumnController extends Controller
      * @queryParam  pid int 上级栏目ID
      * @queryParam  keyword string 关键字
      * @queryParam  describes string 描述
+     * @queryParam  template string 模板
      * @queryParam  show int 是否显示
      * @queryParam  list int 是否列表
      * @queryParam  sort int 排序
@@ -66,6 +82,7 @@ class ColumnController extends Controller
             $Column->pid = $request->pid;
             $Column->keyword = $request->keyword;
             $Column->describes = $request->describes;
+            $Column->template = $request->template;
             $Column->show = $request->show ? Column::COLUMN_SHOW_YES : Column::COLUMN_SHOW_NO;
             $Column->list = $request->list;
             $Column->sort = $request->sort;
@@ -103,13 +120,15 @@ class ColumnController extends Controller
     {
         $return = [];
         $return['column'] = Column::with(['ColumnProperty', 'resources'])->find($id);
-        $Column = Column::where('pid', 0)->where('id', '!=', $id)->get();
-        if ($Column) {
-            $return['pidList'] = collect($Column)->prepend(array(
-                'id' => 0,
-                'name' => '顶级分组'
-            ));
+        $Column = Column::where('show', Column::COLUMN_SHOW_YES)->where('list', Column::COLUMN_LIST_YES)->get();
+        foreach ($Column as $id => $c) {
+            $Column[$id]->label = $c->name;
+            $Column[$id]->value = $c->id;
         }
+        $return['pidList'] = collect(genTree($Column->toArray(), 'pid'))->prepend(array(
+            'value' => 0,
+            'label' => '顶级分组'
+        ));
         return resReturn(1, $return);
     }
 
@@ -124,6 +143,7 @@ class ColumnController extends Controller
      * @queryParam  pid int 上级栏目ID
      * @queryParam  keyword string 关键字
      * @queryParam  describes string 描述
+     * @queryParam  template string 模板
      * @queryParam  show int 是否显示
      * @queryParam  list int 是否列表
      * @queryParam  sort int 排序
@@ -136,6 +156,7 @@ class ColumnController extends Controller
             $Column->pid = $request->pid;
             $Column->keyword = $request->keyword;
             $Column->describes = $request->describes;
+            $Column->template = $request->template;
             $Column->show = $request->show ? Column::COLUMN_SHOW_YES : Column::COLUMN_SHOW_NO;
             $Column->list = $request->list;
             $Column->sort = $request->sort;

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int list
  * @property int sort
  * @property int pv
+ * @property string template
  */
 class Column extends Model
 {

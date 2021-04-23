@@ -19,6 +19,7 @@ class CreateColumnsTable extends Migration
             $table->integer('pid')->default(0)->comment('上级栏目ID');
             $table->string('keyword',255)->nullable()->comment('关键字');
             $table->string('describes',255)->nullable()->comment('描述');
+            $table->string('template',255)->default('defaultColumn')->comment('模板');
             $table->tinyInteger('show')->default(1)->comment('是否显示1是2否');
             $table->tinyInteger('list')->default(0)->comment('是否列表1是0否');
             $table->integer('sort')->default(5)->comment('排序');

@@ -5,6 +5,13 @@
         <el-form-item label="栏目名称">
           <el-input v-model="listQuery.title" placeholder="栏目名称" clearable @keyup.enter.native="handleFilter"/>
         </el-form-item>
+        <el-form-item label="类目" prop="pid">
+          <el-cascader
+            v-model="listQuery.pid"
+            :options="categoryList"
+            :props="{ checkStrictly: true, expandTrigger: 'hover' }"
+            clearable/>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleFilter">搜索</el-button>
         </el-form-item>
@@ -105,6 +112,7 @@ export default {
       ruleForm: [],
       checkAll: false,
       tableKey: 0,
+      categoryList: [],
       list: null,
       total: 0,
       textMap: {
@@ -120,7 +128,8 @@ export default {
         page: 1,
         limit: 10,
         sort: '-id',
-        title: ''
+        title: '',
+        pid: ''
       },
       temp: {}
     }
@@ -132,8 +141,9 @@ export default {
     getList() {
       this.listLoading = true
       getList(this.listQuery).then(response => {
-        this.list = response.data.data
-        this.total = response.data.total
+        this.list = response.data.paginate.data
+        this.total = response.data.paginate.total
+        this.categoryList = response.data.list
         this.listLoading = false
       })
     },

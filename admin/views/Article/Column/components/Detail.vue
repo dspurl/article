@@ -5,19 +5,26 @@
         <el-input v-model="ruleForm.name" maxlength="60" clearable style="width:400px"/>
       </el-form-item>
       <el-form-item label="类目" prop="pid">
-        <el-select v-model="ruleForm.pid" clearable placeholder="请选择">
-          <el-option
-            v-for="item in pidList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"/>
-        </el-select>
+        <el-cascader
+          v-model="ruleForm.pid"
+          :options="pidList"
+          :props="{ checkStrictly: true, expandTrigger: 'hover' }"
+          clearable/>
       </el-form-item>
       <el-form-item label="关键字" prop="keyword">
         <el-input v-model="ruleForm.keyword" maxlength="255" clearable style="width:600px"/>
       </el-form-item>
       <el-form-item label="描述" prop="describes">
         <el-input v-model="ruleForm.describes" maxlength="255" clearable style="width:600px"/>
+      </el-form-item>
+      <el-form-item label="模板" prop="template">
+        <el-select v-model="ruleForm.template" placeholder="请选择">
+          <el-option
+            v-for="item in template"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"/>
+        </el-select>
       </el-form-item>
       <el-form-item label="缩略图" prop="img">
         <el-upload
@@ -119,10 +126,20 @@ export default {
       imgHeaders: {
         Authorization: 'Bearer ' + getToken('access_token')
       },
-      pidList: {},
+      pidList: [],
       dialogVisible: false,
       loading: false,
       id: '',
+      template: [
+        {
+          label: '默认列表风格',
+          value: 'defaultColumn'
+        },
+        {
+          label: '默认详情风格',
+          value: 'defaultColumnDetail'
+        }
+      ],
       ruleForm: {
         name: '',
         pid: '',
@@ -136,7 +153,8 @@ export default {
           details: ''
         },
         list: 0,
-        sort: 5
+        sort: 5,
+        template: 'defaultColumn'
       },
       imgProgress: false,
       imgData: {
@@ -154,6 +172,9 @@ export default {
         ],
         show: [
           { required: true, message: '请选择是否显示', trigger: 'change' }
+        ],
+        template: [
+          { required: true, message: '请选择模板', trigger: 'change' }
         ],
         list: [
           { required: true, message: '请选择是否列表', trigger: 'change' }
@@ -177,6 +198,9 @@ export default {
         this.pidList = response.data.pidList
         if (response.data.column) {
           this.ruleForm = response.data.column
+          if (this.ruleForm.pid === 0) {
+            this.ruleForm.pid = [0]
+          }
           if (!response.data.column.resources) {
             response.data.column.resources = {
               img: ''
@@ -191,6 +215,7 @@ export default {
       this.formLoading = true
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
+          this.ruleForm.pid = typeof this.ruleForm.pid === 'number' ? this.ruleForm.pid : this.ruleForm.pid.pop()
           create(this.ruleForm).then(() => {
             this.dialogFormVisible = false
             this.formLoading = false
@@ -213,6 +238,7 @@ export default {
       this.formLoading = true
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
+          this.ruleForm.pid = typeof this.ruleForm.pid === 'number' ? this.ruleForm.pid : this.ruleForm.pid.pop()
           edit(this.ruleForm).then(() => {
             this.dialogFormVisible = false
             this.formLoading = false

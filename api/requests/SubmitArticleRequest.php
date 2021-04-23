@@ -40,6 +40,7 @@ class SubmitArticleRequest extends Request
                         'column_id' => 'required|array',
                         'keyword' => 'nullable|string|max:255',
                         'describes' => 'nullable|string|max:255',
+                        'template' => 'required|string|max:255',
                         'show' => 'required|numeric',
                         'sort' => 'required|numeric',
                     ];
@@ -49,6 +50,7 @@ class SubmitArticleRequest extends Request
                         'column_id' => 'required|array',
                         'keyword' => 'nullable|string|max:255',
                         'describes' => 'nullable|string|max:255',
+                        'template' => 'required|string|max:255',
                         'show' => 'required|numeric',
                         'sort' => 'required|numeric',
                     ];
@@ -72,6 +74,7 @@ class SubmitArticleRequest extends Request
             'column_id.unique' => '上级类目格式有误',
             'keyword.max' => '关键字长度不能超过255位',
             'describes.max' => '描述长度不能超过255位',
+            'template.max' => '描述长度不能超过255位',
             'show.required' => '是否显示不能为空',
             'show.numeric' => '是否显示格式有误',
             'sort.required' => '排序不能为空',

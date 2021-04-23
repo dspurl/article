@@ -18,6 +18,15 @@
       <el-form-item label="描述" prop="describes">
         <el-input v-model="ruleForm.describes" maxlength="255" clearable style="width:600px"/>
       </el-form-item>
+      <el-form-item label="模板" prop="template">
+        <el-select v-model="ruleForm.template" placeholder="请选择">
+          <el-option
+            v-for="item in template"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"/>
+        </el-select>
+      </el-form-item>
       <el-form-item label="缩略图" prop="img">
         <el-upload
           :show-file-list="false"
@@ -95,7 +104,7 @@ import { detail, edit, create } from '@/api/article'
 import { getToken } from '@/utils/auth'
 import tinymce from '@/components/tinymce5'
 export default {
-  name: 'ColumnDetail',
+  name: 'ArticleDetail',
   components: { tinymce },
   props: {
     isEdit: {
@@ -115,6 +124,12 @@ export default {
       dialogVisible: false,
       loading: false,
       id: '',
+      template: [
+        {
+          label: '默认风格',
+          value: 'defaultArticle'
+        }
+      ],
       ruleForm: {
         name: '',
         pid: '',
@@ -128,7 +143,8 @@ export default {
           details: ''
         },
         column_id: '',
-        sort: 5
+        sort: 5,
+        template: 'defaultArticle'
       },
       imgProgress: false,
       imgData: {
@@ -149,6 +165,9 @@ export default {
         ],
         list: [
           { required: true, message: '请选择是否列表', trigger: 'change' }
+        ],
+        template: [
+          { required: true, message: '请选择模板', trigger: 'change' }
         ],
         sort: [
           { required: true, message: '请输入排序', trigger: 'blur' }

@@ -6,13 +6,11 @@
           <el-input v-model="listQuery.title" placeholder="标题" clearable @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="所属栏目">
-          <el-select v-model="listQuery.type" placeholder="类型" clearable>
-            <el-option
-              v-for="item in column"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"/>
-          </el-select>
+          <el-cascader
+            v-model="listQuery.type"
+            :options="column"
+            :props="{ checkStrictly: true, expandTrigger: 'hover' }"
+            clearable/>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleFilter">搜索</el-button>

@@ -19,6 +19,7 @@ class CreateArticlesTable extends Migration
             $table->string('name',60)->comment('文章名称');
             $table->string('keyword',255)->nullable()->comment('关键字');
             $table->string('describes',255)->nullable()->comment('描述');
+            $table->string('template',255)->default('defaultArticle')->comment('模板');
             $table->tinyInteger('show')->default(1)->comment('是否显示1是2否');
             $table->integer('sort')->default(5)->comment('排序');
             $table->integer('pv')->default(0)->comment('访问量');

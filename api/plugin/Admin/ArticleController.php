@@ -34,11 +34,20 @@ class ArticleController extends Controller
     {
         $q = Article::query();
         $limit = $request->limit;
+        $Column = Column::where('show', Column::COLUMN_SHOW_YES)->where('list', Column::COLUMN_LIST_YES)->get();
+        foreach ($Column as $id => $c) {
+            $Column[$id]->label = $c->name;
+            $Column[$id]->value = $c->id;
+        }
         if ($request->title) {
             $q->where('name', 'like', '%' . $request->title . '%');
         }
-        if ($request->type) {
-            $q->where('column_id', $request->type);
+        if ($request->has('type')) {
+            if ($request->type) {
+                $type = $request->type[count($request->type) - 1];
+                $allSublevel = allSublevel($Column->toArray(), [$type]);
+                $q->whereIn('column_id', $allSublevel);
+            }
         }
         if ($request->has('sort')) {
             $sortFormatConversion = sortFormatConversion($request->sort);
@@ -46,7 +55,7 @@ class ArticleController extends Controller
         }
         $paginate = $q->with(['Column'])->paginate($limit);
         $return['paginate'] = $paginate;
-        $return['column'] = Column::where('list', Column::COLUMN_LIST_YES)->get();
+        $return['column'] = collect(genTree($Column->toArray(), 'pid'));
         return resReturn(1, $return);
     }
 
@@ -59,6 +68,7 @@ class ArticleController extends Controller
      * @queryParam  column_id int 栏目ID
      * @queryParam  keyword string 关键字
      * @queryParam  describes string 描述
+     * @queryParam  template string 模板
      * @queryParam  show int 是否显示
      * @queryParam  sort int 排序
      */
@@ -69,6 +79,7 @@ class ArticleController extends Controller
             $Article->name = $request->name;
             $Article->keyword = $request->keyword;
             $Article->describes = $request->describes;
+            $Article->template = $request->template;
             $Article->show = $request->show ? Article::ARTICLE_SHOW_YES : Article::ARTICLE_SHOW_NO;
             $Article->column_id = $request->column_id[count($request->column_id) - 1];
             $Article->sort = $request->sort;
@@ -122,6 +133,7 @@ class ArticleController extends Controller
      * @queryParam  column_id int 栏目ID
      * @queryParam  keyword string 关键字
      * @queryParam  describes string 描述
+     * @queryParam  template string 模板
      * @queryParam  show int 是否显示
      * @queryParam  sort int 排序
      */
@@ -132,6 +144,7 @@ class ArticleController extends Controller
             $Article->name = $request->name;
             $Article->keyword = $request->keyword;
             $Article->describes = $request->describes;
+            $Article->template = $request->template;
             $Article->show = $request->show ? Article::ARTICLE_SHOW_YES : Article::ARTICLE_SHOW_NO;
             $Article->column_id = $request->column_id[count($request->column_id) - 1];
             $Article->sort = $request->sort;
@@ -179,8 +192,8 @@ class ArticleController extends Controller
     {
         $return = DB::transaction(function () use ($id) {
             $Resource = Resource::where('image_type', 'App\Models\v1\Article')->where('image_id', $id)->first();
-            Resource::where('id', $Resource->id)->delete();
-            Article::where('id', $id)->delete();
+            Resource::destroy($Resource->id);
+            Article::destroy($id);
             imgPathDelete('article', $Resource->img);
             return 1;
         }, 5);

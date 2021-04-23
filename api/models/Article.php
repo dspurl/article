@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int column_id
  * @property int sort
  * @property int pv
+ * @property string template
  */
 class Article extends Model
 {
@@ -48,12 +49,7 @@ class Article extends Model
     protected function getColumnIdAttribute()
     {
         if (isset($this->attributes['column_id'])) {
-            if (self::$withoutAppends) {
-                return $this->attributes['column_id'];
-            } else {
-                return [$this->attributes['column_id']];
-            }
-
+            return $this->attributes['column_id'];
         }
     }
 
