@@ -1,8 +1,1 @@
-{
-    "name": "栏目文章",
-    "abbreviation": "article",
-    "describe": "支持添加栏目和文章",
-    "url": "https://github.com/dspurl/article",
-    "download": "",
-    "versions": "2.1.0"
-}
+{"name":"\u680f\u76ee\u6587\u7ae0","abbreviation":"article","describe":"\u680f\u76ee\u548c\u6587\u7ae0\u63d2\u4ef6","versions":"0.0.1","author":"dspurl"}
