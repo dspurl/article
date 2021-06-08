@@ -1,6 +1,22 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+      <el-form :inline="true" :model="listQuery" class="demo-form-inline">
+        <el-form-item label="栏目名称">
+          <el-input v-model="listQuery.title" placeholder="栏目名称" clearable @keyup.enter.native="handleFilter"/>
+        </el-form-item>
+        <el-form-item label="类目" prop="pid">
+          <el-cascader
+            v-model="listQuery.pid"
+            :options="categoryList"
+            :props="{ checkStrictly: true, expandTrigger: 'hover' }"
+            clearable/>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleFilter">搜索</el-button>
+        </el-form-item>
+      </el-form>
+      <br>
       <router-link v-permission="$store.jurisdiction.ColumnCreate" :to="'ColumnCreate'">
         <el-button class="filter-item" style="margin-left: 10px;float:right;" type="primary" icon="el-icon-edit">添加</el-button>
       </router-link>
@@ -20,54 +36,34 @@
         type="selection"
         width="55"
         fixed="left"/>
-      <el-table-column label="ID" prop="id">
+      <el-table-column :label="$t('usuel.id')" sortable="custom" align="center" width="65" prop="id">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="栏目名称" prop="name">
+      <el-table-column label="栏目名称" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上级栏目ID" prop="pid">
+      <el-table-column label="上级类目" align="center" sortable="custom" prop="pid">
         <template slot-scope="scope">
-          <span>{{ scope.row.pid }}</span>
+          <span>{{ scope.row.column ? scope.row.column.name : '顶级类目' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="关键字" prop="keyword">
+      <el-table-column label="是否列表" align="center" sortable="custom" prop="is_list">
         <template slot-scope="scope">
-          <span>{{ scope.row.keyword }}</span>
+          <span>{{ scope.row.is_list ? '是' : '否' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="描述" prop="describes">
+      <el-table-column label="时间" align="center" sortable="custom" prop="created_at">
         <template slot-scope="scope">
-          <span>{{ scope.row.describes }}</span>
+          <span>{{ scope.row.created_at }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="模板" prop="template">
+      <el-table-column label="状态" align="center" sortable="custom" prop="is_show">
         <template slot-scope="scope">
-          <span>{{ scope.row.template }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="是否显示" prop="is_show">
-        <template slot-scope="scope">
-          <span>{{ scope.row.is_show }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="是否列表" prop="is_list">
-        <template slot-scope="scope">
-          <span>{{ scope.row.is_list }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="排序" prop="sort">
-        <template slot-scope="scope">
-          <span>{{ scope.row.sort }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="访问量" prop="pv">
-        <template slot-scope="scope">
-          <span>{{ scope.row.pv }}</span>
+          <span>{{ scope.row.is_show === 1 ? '显示' : '隐藏' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" class-name="small-padding fixed-width" width="250" fixed="right">

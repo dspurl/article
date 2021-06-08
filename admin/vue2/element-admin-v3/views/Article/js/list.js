@@ -6,7 +6,9 @@ export default {
   data() {
     return {
       tableKey: 0,
+      categoryList: [],
       list: null,
+      column: [],
       total: 0,
       formLoading: false,
       listLoading: false,
@@ -24,8 +26,9 @@ export default {
     getList() {
       this.listLoading = true
       getList(this.listQuery).then(response => {
-        this.list = response.data.data
-        this.total = response.data.total
+        this.list = response.data.paginate.data
+        this.total = response.data.paginate.total
+        this.column = response.data.column
         this.listLoading = false
       })
     },
@@ -73,6 +76,10 @@ export default {
       })
     },
     handleAllDelete() { // 批量删除
+      if (!this.multipleSelection) {
+        this.$message.error('请选择要删除的内容')
+        return false
+      }
       const title = '是否确认批量删除内容?'
       const win = '删除成功'
       this.$confirm(title, this.$t('hint.hint'), {

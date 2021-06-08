@@ -29,9 +29,11 @@ export function detail(id) {
     method: 'GET'
   })
 }
-export function destroy(id) {
+export function destroy(id, data) {
+  data = Qs.parse(data)
   return request({
     url: 'column/destroy/' + id,
-    method: 'POST'
+    method: 'POST',
+    data
   })
 }

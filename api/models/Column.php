@@ -31,4 +31,24 @@ class Column extends Model
     {
         return $date->format('Y-m-d H:i:s');
     }
+
+    /**
+     * 获取单张图片
+     */
+    public function resources()
+    {
+        return $this->morphOne('App\Models\v1\Resource', 'image');
+    }
+
+    // 父栏目
+    public function Column()
+    {
+        return $this->hasOne(Column::class, 'id', 'pid');
+    }
+
+    // 栏目附加
+    public function columnProperty()
+    {
+        return $this->hasOne(ColumnProperty::class);
+    }
 }

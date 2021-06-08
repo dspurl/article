@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ColumnProperty extends Model
 {
+    protected $table = 'column_propertys';
     public static $withoutAppends = true;
     /**
      * Prepare a date for array / JSON serialization.

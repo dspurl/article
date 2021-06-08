@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ArticleProperty extends Model
 {
+    protected $table = 'article_propertys';
     public static $withoutAppends = true;
     /**
      * Prepare a date for array / JSON serialization.
