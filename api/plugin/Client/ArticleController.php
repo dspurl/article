@@ -65,7 +65,7 @@ class ArticleController extends Controller
      */
     public function detail($id)
     {
-        $return = Article::select('id', 'column_id', 'name', 'template', 'keyword', 'describes', 'created_at')->with(['ArticleProperty' => function ($q) {
+        $return = Article::select('id', 'column_id', 'name', 'template', 'keyword', 'describes', 'created_at', 'pv', 'updated_at')->with(['ArticleProperty' => function ($q) {
             $q->select('details', 'article_id');
         }, 'resources', 'Column' => function ($q) {
             $q->select('id', 'name');

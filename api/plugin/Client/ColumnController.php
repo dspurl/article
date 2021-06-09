@@ -57,7 +57,7 @@ class ColumnController extends Controller
      */
     public function pv($id)
     {
-        Column::where('id', $id)->increment('pv');
+        Column::where('id', $id)->select('id', 'column_id', 'name', 'template', 'keyword', 'describes', 'created_at', 'pv', 'updated_at')->increment('pv');
         return resReturn(1,'成功');
     }
 }
