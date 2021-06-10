@@ -12,3 +12,9 @@ export function detail(id) {
     method: 'GET'
   })
 }
+export function pv(id) {
+  return request({
+    url: 'column/pv/' + id,
+    method: 'POST'
+  })
+}
