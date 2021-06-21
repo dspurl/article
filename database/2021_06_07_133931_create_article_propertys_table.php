@@ -14,7 +14,7 @@ class CreateArticlePropertysTable extends Migration
         Schema::create('article_propertys', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('article_id')->default('0')->comment('文章ID');
-            $table->text('details')->comment('详情');
+            $table->text('details')->nullable()->comment('详情');
             $table->timestamps();
             $table->charset = 'utf8';
             $table->engine = 'INNODB';

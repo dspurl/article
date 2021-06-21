@@ -14,7 +14,7 @@ class CreateColumnPropertysTable extends Migration
         Schema::create('column_propertys', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('column_id')->default('0')->comment('栏目ID');
-            $table->text('details')->comment('详情');
+            $table->text('details')->nullable()->comment('详情');
             $table->timestamps();
             $table->charset = 'utf8';
             $table->engine = 'INNODB';
