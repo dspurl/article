@@ -1,54 +1,74 @@
-import {getList} from '@/api/article'
+import defaultColumn from '../components/defaultColumn'
+import defaultColumnDetail from '../components/defaultColumnDetail'
+import { getList as getArticleList } from '@/api/article'
+import { pv } from '@/api/column'
 export default {
+  components: { defaultColumn, defaultColumnDetail },
   data() {
     return {
-      list: [],
-      listQuery: {},
+      template: '',
+      data: {},
       loading: false,
-      total: 0
+      listQuery: {},
     }
   },
   async asyncData (ctx) {
     try {
       const { query } = ctx;
-      const listQuery={
-        limit: 20,
-        page: 1,
-        sort: ''
-      };
-      let [data] = await Promise.all([
-        getList(listQuery)
-      ])
+      let listQuery = {
+        limit: 10,
+        page: query.page ? query.page : 1
+      }
+      let [ columnData ] = await Promise.all([
+        getArticleList(query.id, listQuery)
+      ]);
       return {
-        list: data.data,
-        total: data.total,
+        data: columnData,
         listQuery: listQuery
       }
     } catch(err) {
       ctx.$errorHandler(err)
     }
   },
+  watch: {
+    '$route'(to, from) {
+      if (to.fullPath !== from.fullPath) {
+        this.$nextTick(() => {
+          this.listQuery.page = 1
+          this.getList()
+        })
+      }
+    }
+  },
   head () {
     return {
-      title: process.env.APP_NAME,
+      title: this.data.column.name + '-' + process.env.APP_NAME,
       meta: [
-        { hid: 'index', name: process.env.APP_NAME, content: process.env.APP_KEYWORD },
-        { hid: 'description', name: 'description', content: process.env.APP_DESCRIPTION }
+        { hid: 'index', name: this.data.column.name + '-' + process.env.APP_NAME, content: this.data.column.keywords ? this.data.column.keywords : process.env.APP_KEYWORD },
+        { hid: 'description', name: 'description', content: this.data.column.short_description ? this.data.column.short_description : process.env.APP_DESCRIPTION }
       ]
+    }
+  },
+  mounted() {
+    this.template = this.data.column.template
+    if(this.data.column.list !== 1){
+      this.setPV()
     }
   },
   methods: {
     getList(){
-      this.loading = true;
-      Promise.all([
-        getList(this.listQuery)
-      ]).then(([data]) => {
-        this.list = data.data;
-        this.total = data.total;
-        this.loading = false;
-      }).catch((error) => {
-        this.loading = false;
+      this.loading = true
+      getArticleList($nuxt.$route.query.id, this.listQuery).then(response => {
+        this.data = response
+        this.loading = false
+        this.template = this.data.column.template
+        if(this.data.column.list !== 1){
+          this.setPV()
+        }
       })
+    },
+    setPV(){
+      pv($nuxt.$route.query.id)
     }
   }
 }

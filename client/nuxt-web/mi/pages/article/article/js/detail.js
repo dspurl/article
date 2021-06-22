@@ -1,18 +1,22 @@
-import {detail} from '@/api/article'
+import defaultArticle from '../components/defaultArticle'
+import { detail as getArticleDetailList, pv } from '@/api/article'
 export default {
+  components: { defaultArticle },
   data() {
     return {
-      detailData: {},
+      template: '',
+      data: '',
+      loading: false
     }
   },
   async asyncData (ctx) {
     try {
       const { query } = ctx;
-      let [ data ] = await Promise.all([
-        detail(query.id)
+      let [ articleDetailData ] = await Promise.all([
+        getArticleDetailList(query.id)
       ]);
       return {
-        detailData: data
+        data: articleDetailData
       }
     } catch(err) {
       ctx.$errorHandler(err)
@@ -20,15 +24,20 @@ export default {
   },
   head () {
     return {
-      title: process.env.APP_NAME,
+      title: this.data.name + '-' + process.env.APP_NAME,
       meta: [
-        { hid: 'index', name: process.env.APP_NAME, content: process.env.APP_KEYWORD },
-        { hid: 'description', name: 'description', content: process.env.APP_DESCRIPTION }
+        { hid: 'index', name: this.data.name + '-' + process.env.APP_NAME, content: this.data.keywords ? this.data.keywords : process.env.APP_KEYWORD },
+        { hid: 'description', name: 'description', content: this.data.short_description ? this.data.short_description : process.env.APP_DESCRIPTION }
       ]
     }
   },
   mounted() {
+    this.template = this.data.template
+    this.setPV()
   },
   methods: {
+    setPV(){
+      pv($nuxt.$route.query.id)
+    }
   }
 }
