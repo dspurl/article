@@ -5,7 +5,7 @@
 		</view>
 		<block v-else>
 			<view class="notice-item margin-top" v-for="(item, index) in data" :key="index" @click="goNavigator(item)">
-				<view class="content">
+				<view class="content padding">
 					<block v-if="item.resources">
 						<text class="title">{{item.name}}</text>
 						<view class="img-wrapper">

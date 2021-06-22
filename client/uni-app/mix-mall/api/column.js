@@ -21,3 +21,14 @@ export function detail(id, data,success,fail) {
 	  })
 	})
 }
+export function pv(id, data,success,fail) {
+	Network.setPost('column/pv/' + id,data, function (res) {
+	  success(res)
+	}, function (res) {
+	  uni.showToast({
+		title: res.message,
+		icon: 'none',
+		duration: 2000
+	  })
+	})
+}
