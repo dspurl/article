@@ -21,7 +21,7 @@ page {
 
 	.content {
 		width: 710upx;
-		padding: 0 24upx;
+		padding: 20upx 24upx;
 		background-color: #fff;
 		border-radius: 4upx;
 	}
@@ -56,7 +56,8 @@ page {
 		top: 0;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, .3);
+		padding:20px;
+		background-color: rgba(64, 158, 255, 0.3);
 		font-size: 36upx;
 		color: #fff;
 	}
